@@ -25,6 +25,7 @@
 | Tool | What it does |
 |------|-------------|
 | `nuvc_score` | Screen inbound deals — score any pitch content on a 0-10 scale in seconds |
+| `nuvc_screen_fund` | Screen a VC/PE fund the LP way — 6-dimension LP screen + conviction verdict + decision, optionally against your mandate |
 | `nuvc_match_investors` | Find co-investors or syndicate partners for a deal from 3,700+ investors |
 | `nuvc_venture_math` | Validate startup financials against stage-appropriate VC benchmarks |
 | `nuvc_fund_economics` | Fund economics from an LP lens — fee drag, GP alignment, J-curve, return decomposition |
