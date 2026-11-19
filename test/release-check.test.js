@@ -10,6 +10,17 @@ import { dirname, join } from "node:path";
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const pkg = JSON.parse(readFileSync(join(root, "package.json"), "utf8"));
 
+// Versions are literal data, never regular-expression source.
+function hasVersionHeading(markdown, version) {
+  if (typeof version !== "string" || !version || /[\r\n]/.test(version)) return false;
+  const tokens = [version, `[${version}]`];
+  return markdown.split(/\r?\n/).some((line) => {
+    if (!line.startsWith("## ")) return false;
+    const heading = line.slice(3);
+    return tokens.some((token) => heading === token || (heading.startsWith(token) && /^\s/.test(heading.slice(token.length))));
+  });
+}
+
 // Adding or removing a shipped file means editing this list in the same change, which puts it in review.
 const EXPECTED_FILES = [
   "CHANGELOG.md",
@@ -91,8 +102,7 @@ test("every shipped script parses and imports only declared dependencies", () =>
 test("the version has a CHANGELOG heading and no Unreleased section ships", () => {
   // Rule: `## <version>` (optionally followed by text) must exist; there is no "or Unreleased" escape.
   const log = readFileSync(join(root, "CHANGELOG.md"), "utf8");
-  const esc = pkg.version.replace(/\./g, "\\.");
-  assert.match(log, new RegExp(`^## \\[?${esc}\\]?(\\s|$)`, "m"), `CHANGELOG.md has no "## ${pkg.version}" heading`);
+  assert.ok(hasVersionHeading(log, pkg.version), `CHANGELOG.md has no "## ${pkg.version}" heading`);
   assert.doesNotMatch(log, /^## Unreleased/m);
 });
 
@@ -109,7 +119,8 @@ test("manifest.json and smithery.yaml carry the package version", () => {
   // so a stale copy is the way their version drifts from the package.
   const manifest = JSON.parse(readFileSync(join(root, "manifest.json"), "utf8"));
   assert.equal(manifest.version, pkg.version);
-  assert.match(readFileSync(join(root, "smithery.yaml"), "utf8"), new RegExp(`^version: ${pkg.version.replace(/\./g, "\\.")}$`, "m"));
+  const versions = readFileSync(join(root, "smithery.yaml"), "utf8").split(/\r?\n/).filter((line) => line.startsWith("version: ")).map((line) => line.slice("version: ".length));
+  assert.deepEqual(versions, [pkg.version]);
 });
 
 test("manifest.json and smithery.yaml list exactly the tools the full toolset advertises", async () => {
@@ -130,4 +141,19 @@ test("README describes the screening outcome as applying the investor's own mand
   assert.ok(row, "nuvc_score row present");
   assert.doesNotMatch(row, /suggested proceed/i);
   assert.match(row, /proceed\/watch\/pass outcome that applies your own saved mandate and rules/);
+});
+
+
+test("version headings treat regex metacharacters literally and reject prefix matches", () => {
+  for (const version of ["2.0.0", "2.0.0+build.1", "2.0.0+a(b)[c]{2}^$|?*\\end"]) {
+    for (const heading of [`## ${version}`, `## [${version}]`, `## ${version} - release`, `## [${version}] release`]) {
+      assert.equal(hasVersionHeading(`before\r\n${heading}\r\nafter`, version), true, heading);
+    }
+    assert.equal(hasVersionHeading(`## ${version}extra`, version), false);
+    assert.equal(hasVersionHeading(`## [${version}]extra`, version), false);
+    assert.equal(hasVersionHeading(`### ${version}`, version), false);
+    assert.equal(hasVersionHeading(`## ${version.replaceAll(".", "x")}`, version), false);
+  }
+  assert.equal(hasVersionHeading("## unrelated", "(.*)"), false);
+  assert.equal(hasVersionHeading("## 2.0.0", ""), false);
 });

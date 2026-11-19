@@ -120,7 +120,8 @@ test("package.json version matches the manifests that carry it", () => {
   const read = (f) => readFileSync(new URL(`../${f}`, import.meta.url), "utf8");
   const v = JSON.parse(read("package.json")).version;
   assert.equal(JSON.parse(read("manifest.json")).version, v);
-  assert.match(read("smithery.yaml"), new RegExp(`^version: ${v.replace(/\./g, "\\.")}$`, "m"));
+  const versions = read("smithery.yaml").split(/\r?\n/).filter((line) => line.startsWith("version: ")).map((line) => line.slice("version: ".length));
+  assert.deepEqual(versions, [v]);
 });
 
 test("nuvc_match_investors makes no pool-size claim when the API omits pool_size (#5506 A19)", async () => {
