@@ -51,7 +51,7 @@ test("no founder tool is advertised, even with the removed 1.x switch set in the
 test("calling nuvc_roast fails with a migration message naming repyh-mcp and makes no upstream call", async () => {
   const api = accountApi();
   try {
-    await assert.rejects(createHandlers(FIRM1_A).nuvc_roast({ text: "x" }), /removed from nuvc-mcp 2\.0.*repyh-mcp.*not released yet.*nuvc-mcp@1\.4\.1/s);
+    await assert.rejects(createHandlers(FIRM1_A).nuvc_roast({ text: "x" }), /removed from nuvc-mcp 2\.0.*repyh-mcp.*founder workflows.*nuvc-mcp@1\.4\.1/s);
     assert.equal(api.calls.length, 0);
   } finally {
     api.restore();
@@ -105,7 +105,7 @@ test("a REPYH founder key (repyh_...) is refused before any fetch, on every tool
   try {
     const h = createHandlers("repyh_" + "a".repeat(64));
     for (const [tool, args] of [["nuvc_score", { text: "a fintech" }], ["nuvc_get_mandate", {}], ["nuvc_models", {}]]) {
-      await assert.rejects(h[tool](args), /REPYH founder key.*repyh-mcp.*not released yet.*nuvc-mcp@1\.4\.1/s, tool);
+      await assert.rejects(h[tool](args), /REPYH founder key.*repyh-mcp.*founder workflows.*nuvc-mcp@1\.4\.1/s, tool);
     }
     // stdio passes a getter over the env var; same refusal
     await assert.rejects(createHandlers(() => "repyh_" + "b".repeat(64)).nuvc_models({}), /repyh-mcp/);

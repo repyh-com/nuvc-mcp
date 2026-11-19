@@ -2,11 +2,21 @@
 
 Examine the evidence behind a deal or fund, identify the open questions, and decide what deserves diligence. You retain every investment decision. Scoring, screening and matching spend credits; analysis and extraction use your monthly quota. Stored workspace reads do not rerun scoring.
 
-**Source and release:** this README describes the repository implementation. The first command below runs the source locally; the registry installation examples later in Setup may expose an earlier toolset until a release is published.
+**Version 2.0.0:** this release is investor-only and changes the 1.x founder workflow. Use the version-pinned setup below for this toolset, or run a local source copy. Account permissions and backend availability still apply; installing the package does not enable workspace access or purchase credits.
 
 - Read your own pipeline, a deal's decision brief, and how you decided on similar deals. Read-only, and only the account that owns your key. These three tools need the investor workspace to be on for your account.
 - Score a pitch 0 to 10 with a confidence level against the mandate saved on your firm account, screen a fund as an LP, or find co-investors. One credit each.
 - Your key travels in a header, not in a URL, by default. Tools that spend credits are labelled, so a client can ask first.
+
+## GitHub release installation
+
+Release artifacts require Node.js 20 or newer (Node.js 24 LTS recommended). After the versioned GitHub release asset is available, configure your existing compatible key locally and run:
+
+```bash
+NUVC_API_KEY='replace_with_your_existing_key' npx --yes https://github.com/repyh-com/nuvc-mcp/releases/download/v2.0.0/nuvc-mcp-2.0.0.tgz
+```
+
+The npm commands and client configuration below require `nuvc-mcp@2.0.0` to have been published to the npm registry. If that version is not available there, replace the `nuvc-mcp@2.0.0` argument in your client configuration with the GitHub asset URL above. A GitHub release asset and an npm registry package are separate distribution channels; each installation path becomes usable when its corresponding artifact is published.
 
 Before running a local source copy, use Node.js 20 or newer (Node.js 24 LTS recommended) and install its dependencies from the directory containing this package's `package.json`:
 
@@ -175,21 +185,19 @@ your account.
 ### 1. Get an API key
 
 This package takes an **investor** key (starts with `nuvc_`). A founder key (`repyh_...`) is refused
-before any request. Founder tools are moving to REPYH's own package, `repyh-mcp`, which is not released yet; `nuvc-mcp@1.4.1` keeps the old behaviour.
+before any request. Use `repyh-mcp` for founder workflows; `nuvc-mcp@1.4.1` retains legacy behavior.
 
 Create or review an investor key at **[nuvc.ai/api-platform/keys](https://nuvc.ai/api-platform/keys)**. Check the current allowance in your account.
 
-### 2. Install via Smithery (Claude Desktop / Cursor)
+### 2. Choose the investor release
 
-```bash
-npx @smithery/cli install nuvc --client claude
-```
+Use `nuvc-mcp@2.0.0` in the commands below. This is a breaking change from 1.x: it accepts investor keys and removes founder tools. Registry listings and third-party installers may select a different version; check the selected version before migrating a client.
 
 ### 3. Or run directly
 
 ```bash
 export NUVC_API_KEY=nuvc_your_key_here
-npx nuvc-mcp
+npx --yes nuvc-mcp@2.0.0
 ```
 
 ### 4. Claude Desktop config
@@ -201,7 +209,7 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
   "mcpServers": {
     "nuvc": {
       "command": "npx",
-      "args": ["nuvc-mcp"],
+      "args": ["--yes", "nuvc-mcp@2.0.0"],
       "env": {
         "NUVC_API_KEY": "nuvc_your_key_here"
       }
@@ -213,7 +221,7 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
 ### 5. Claude Code
 
 ```bash
-claude mcp add nuvc -- npx nuvc-mcp
+claude mcp add nuvc -- npx --yes nuvc-mcp@2.0.0
 # Then set NUVC_API_KEY in your environment
 ```
 
@@ -247,7 +255,7 @@ Once connected, just ask your AI agent:
 
 | 1.x | 2.0 |
 |-----|-----|
-| `nuvc_roast` | **Removed.** Founder tools are moving to REPYH's own package, `repyh-mcp`, which is not released yet. A call to `nuvc_roast` returns a migration message that says so and names it. |
+| `nuvc_roast` | **Removed.** Use `repyh-mcp` for founder workflows. A call to `nuvc_roast` returns a migration message without making a request. `nuvc-mcp@1.4.1` retains legacy behavior. |
 | Mandate lived in the session, with best-effort account save | Mandate lives on the **firm account** that owns the API key. `nuvc_set_mandate` now fails loudly if it cannot be saved instead of silently applying to one session; `nuvc_get_mandate` and `nuvc_score` read the account mandate. |
 | Founder-oriented tool descriptions | Investor wording; tool names, inputs and credit costs are unchanged. |
 
@@ -259,7 +267,7 @@ if you need the old behaviour unchanged.
 `node server.js` serves `POST /mcp`. Every request must carry the **caller's own** NUVC key
 (`Authorization: Bearer nuvc_...` or `X-API-Key`); a request without one gets `401`. The server never reads a shared key from its environment. Bodies are capped at 1 MB (`413`),
 malformed JSON gets a `400` JSON-RPC parse error, and each request is bound to the calling key's firm account (no state is shared between callers).
-stdio mode (`npx nuvc-mcp`) reads `NUVC_API_KEY` from your local environment.
+stdio mode (`npx --yes nuvc-mcp@2.0.0`) reads `NUVC_API_KEY` from your local environment.
 
 HTTP settings (all optional):
 

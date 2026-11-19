@@ -39,7 +39,7 @@ test("stdio: a repyh_ key in NUVC_API_KEY is refused with a pointer to repyh-mcp
   try {
     const res = await client.callTool({ name: "nuvc_models", arguments: {} });
     assert.equal(res.isError, true);
-    assert.match(res.content[0].text, /REPYH founder key.*repyh-mcp.*not released yet.*nuvc-mcp@1\.4\.1/s);
+    assert.match(res.content[0].text, /REPYH founder key.*repyh-mcp.*founder workflows.*nuvc-mcp@1\.4\.1/s);
   } finally {
     await client.close();
   }

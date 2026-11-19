@@ -9,9 +9,8 @@
   `NUVC_TOOLSET=all` to restore the full list. Nothing is removed: tool names, input schemas, annotations and credit
   costs are unchanged, and a tool that is not listed can still be called by name.
 - **Founder tools are removed.** `nuvc_roast` is no longer listed, and calling it answers with a migration
-  message that names `repyh-mcp` and says it is not released yet; it makes no request. Founder tools are
-  moving to REPYH's own package, `repyh-mcp`, which is not released yet; `nuvc-mcp@1.4.1` keeps the old
-  behaviour. No founder tool is advertised under any environment.
+  message directing founder workflows to `repyh-mcp`; it makes no request. `nuvc-mcp@1.4.1` retains
+  legacy behavior. No founder tool is advertised under any environment.
 - **`NUVC_MCP_LEGACY_FOUNDER_TOOLS` is removed.** Setting it no longer re-advertises `nuvc_roast` (stdio or HTTP);
   it is ignored.
 - **The mandate is bound to the firm account, not the session.** The package keeps no mandate state.
@@ -45,7 +44,7 @@
   reads "This feature isn't enabled for your account yet"; 401 and 403 read "your NUVC key does not have access to
   the investor workspace".
 - A REPYH founder key (`repyh_...`) is refused before any request, on stdio and on every HTTP request, with a message
-  naming `repyh-mcp` (not released yet; `nuvc-mcp@1.4.1` keeps the old behaviour). Investor keys (`nuvc_...`,
+  directing founder workflows to `repyh-mcp`; `nuvc-mcp@1.4.1` retains legacy behavior. Investor keys (`nuvc_...`,
   including keys minted before keys carried an audience) work unchanged.
 - The whole key must be letters, digits and underscores after `nuvc_`. Anything else is refused before any request
   and is never echoed in an error.

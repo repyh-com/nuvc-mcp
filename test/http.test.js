@@ -221,7 +221,7 @@ test("calling nuvc_roast over HTTP returns a migration error naming repyh-mcp, n
   const api = fakeApi();
   try {
     const out = await toolText(await callTool("nuvc_roast", { text: "x" }, { Authorization: `Bearer ${KEY_A}` }));
-    assert.match(out, /removed from nuvc-mcp 2\.0.*repyh-mcp.*not released yet.*nuvc-mcp@1\.4\.1/s);
+    assert.match(out, /removed from nuvc-mcp 2\.0.*repyh-mcp.*founder workflows.*nuvc-mcp@1\.4\.1/s);
     assert.equal(api.calls.length, 0, "no upstream call, no credit");
   } finally {
     api.restore();
@@ -238,7 +238,7 @@ test("HTTP: a repyh_ founder key gets 401 naming repyh-mcp on a tools/call that 
         body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "tools/call", params: { name: "nuvc_models", arguments: {} } }),
       });
       assert.equal(res.status, 401);
-      assert.match((await res.json()).error.message, /REPYH founder key.*repyh-mcp.*not released yet.*nuvc-mcp@1\.4\.1/s);
+      assert.match((await res.json()).error.message, /REPYH founder key.*repyh-mcp.*founder workflows.*nuvc-mcp@1\.4\.1/s);
     }
     assert.equal(api.calls.length, 0);
   } finally {
