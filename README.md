@@ -8,7 +8,7 @@ Examine the evidence behind a deal or fund, identify the open questions, and dec
 - Score a pitch 0 to 10 with a confidence level against the mandate saved on your firm account, screen a fund as an LP, or find co-investors. One credit each.
 - Your key travels in a header, not in a URL, by default. Tools that spend credits are labelled, so a client can ask first.
 
-Before running a local source copy, use Node.js 18 or newer and install its dependencies from the directory containing this package's `package.json`:
+Before running a local source copy, use Node.js 20 or newer (Node.js 24 LTS recommended) and install its dependencies from the directory containing this package's `package.json`:
 
 ```bash
 npm install --ignore-scripts
