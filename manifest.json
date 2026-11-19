@@ -1,0 +1,60 @@
+{
+  "manifest_version": "0.3",
+  "name": "nuvc",
+  "display_name": "NUVC — Investor deal & fund intelligence",
+  "version": "2.0.0",
+  "description": "Investor MCP: score and screen deals against your firm's saved mandate, screen funds as an LP, and find co-investors. Bound to your firm's NUVC account.",
+  "long_description": "NUVC is the conviction layer for capital allocation. nuvc-mcp 2.0 is investor-only: score any startup or fund with an IC-ready verdict, save your firm's mandate once on your NUVC account so every score returns a two-way mandate fit, find co-investors, and run venture math and fund economics — all from Claude. Get an API key at https://nuvc.ai/api-platform/keys.",
+  "author": {
+    "name": "NUAI Pty Ltd",
+    "url": "https://nuvc.ai"
+  },
+  "homepage": "https://nuvc.ai/developers",
+  "documentation": "https://nuvc.ai/api-platform/docs",
+  "license": "MIT",
+  "keywords": [
+    "vc",
+    "venture capital",
+    "startup scoring",
+    "investor matching",
+    "due diligence",
+    "fund screening",
+    "pitch deck"
+  ],
+  "server": {
+    "type": "node",
+    "entry_point": "index.js",
+    "mcp_config": {
+      "command": "node",
+      "args": ["${__dirname}/index.js"],
+      "env": {
+        "NUVC_API_KEY": "${user_config.api_key}"
+      }
+    }
+  },
+  "tools": [
+    { "name": "nuvc_billing", "description": "Read your current balance, quota, tool costs and available pack price; no purchase." },
+    { "name": "nuvc_score", "description": "Screen a pitch deck like an investment committee — a 0–10 score with strengths, gaps, and diligence questions; two-way fit against your firm mandate" },
+    { "name": "nuvc_match_investors", "description": "Find co-investors and syndicate partners — a ranked, thesis-fit shortlist (a well-matched few beats a mass blast), each with a reason and brief" },
+    { "name": "nuvc_screen_fund", "description": "Screen a VC fund across 6 LP-grade dimensions against your mandate" },
+    { "name": "nuvc_analyze", "description": "Market, competitive, financial, or pitch-deck analysis" },
+    { "name": "nuvc_extract", "description": "Extract structured fields from any pitch or business description" },
+    { "name": "nuvc_set_mandate", "description": "Save your firm's mandate on the account that owns the key" },
+    { "name": "nuvc_get_mandate", "description": "Retrieve your firm's saved mandate" },
+    { "name": "nuvc_venture_math", "description": "Compute dilution, ownership, burn multiple, LTV/CAC, Rule of 40, IRR/MOIC vs VC thresholds" },
+    { "name": "nuvc_fund_economics", "description": "Fund economics for LPs — fee drag, GP alignment, J-curve, portfolio construction" },
+    { "name": "nuvc_models", "description": "List available scoring models and provider health" },
+    { "name": "nuvc_my_deals", "description": "Your own deal pipeline, read-only" },
+    { "name": "nuvc_deal_brief", "description": "The decision brief for a deal in your pipeline, read-only" },
+    { "name": "nuvc_precedent", "description": "Your own decision history on similar deals, read-only" }
+  ],
+  "user_config": {
+    "api_key": {
+      "type": "string",
+      "title": "NUVC API Key",
+      "description": "Your NUVC API key (starts with nuvc_). Get a free key — 2 free credits, no card — at https://nuvc.ai/api-platform/keys",
+      "sensitive": true,
+      "required": true
+    }
+  }
+}

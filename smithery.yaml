@@ -1,6 +1,6 @@
 name: nuvc
-description: VC-grade startup intelligence for founders and investors — score ideas, match investors from 3,700+ database, analyze markets, compute venture math, and evaluate fund economics
-version: 1.2.0
+description: Investor MCP — score and screen deals against your firm's saved mandate, screen funds as an LP, and find co-investors. Bound to your firm's NUVC account (investor-only as of 2.0).
+version: 2.0.0
 homepage: https://nuvc.ai/api-platform/keys
 license: MIT
 
@@ -16,19 +16,31 @@ startCommand:
       required: true
 
 tools:
+  - name: nuvc_billing
+    description: Read your current balance, quota, tool costs and available pack price; no purchase
   - name: nuvc_score
-    description: Score any business idea 0-10 across 5 VC dimensions
+    description: Screen a pitch deck like an investment committee — a 0-10 score with strengths, gaps, and diligence questions; two-way fit against your firm mandate
   - name: nuvc_analyze
     description: Market, competitive, financial, or pitch deck analysis
-  - name: nuvc_roast
-    description: Brutally honest VC-perspective startup roast
   - name: nuvc_extract
     description: Extract structured fields from any pitch or business description
   - name: nuvc_models
     description: List available AI models and provider health
   - name: nuvc_match_investors
-    description: Find best-fit investors from 3,700+ database using AI semantic matching
+    description: Find co-investors and syndicate partners — a ranked, thesis-fit shortlist (a well-matched few beats a mass blast), each with a reason and brief
+  - name: nuvc_screen_fund
+    description: Screen a VC fund across 6 LP-grade dimensions against your mandate
+  - name: nuvc_set_mandate
+    description: Save your firm's mandate on the account that owns the key
+  - name: nuvc_get_mandate
+    description: Retrieve your firm's saved mandate
   - name: nuvc_venture_math
     description: Compute burn multiple, LTV/CAC, Rule of 40, dilution, and benchmark against VC thresholds
   - name: nuvc_fund_economics
     description: Fund economics for LPs — fee drag, GP alignment, J-curve, portfolio construction
+  - name: nuvc_my_deals
+    description: Your own deal pipeline, read-only
+  - name: nuvc_deal_brief
+    description: The decision brief for a deal in your pipeline, read-only
+  - name: nuvc_precedent
+    description: Your own decision history on similar deals, read-only
