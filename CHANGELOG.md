@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.0.1 — listed in the official MCP Registry
+
+- Adds `mcpName` (`io.github.repyh-com/nuvc-mcp`) to `package.json`, a matching `mcp-name` line in the README and a
+  `server.json`, so the package can be published to the official MCP Registry (registry.modelcontextprotocol.io).
+  Directories that read from the registry pick it up from there.
+- No change to tools, schemas, credit costs or behaviour.
+
 ## 2.0.0 — investor-only, firm-bound
 
 ### Breaking

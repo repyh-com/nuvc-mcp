@@ -1,5 +1,7 @@
 # nuvc-mcp: your pipeline and decision history, inside Claude and Cursor
 
+<!-- mcp-name: io.github.repyh-com/nuvc-mcp -->
+
 Examine the evidence behind a deal or fund, identify the open questions, and decide what deserves diligence. You retain every investment decision. Scoring, screening and matching spend credits; analysis and extraction use your monthly quota. Stored workspace reads do not rerun scoring.
 
 **Version 2.0.0:** this release is investor-only and changes the 1.x founder workflow. Use the version-pinned setup below for this toolset, or run a local source copy. Account permissions and backend availability still apply; installing the package does not enable workspace access or purchase credits.
