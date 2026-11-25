@@ -20,6 +20,9 @@ jobs:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    # Give this environment a required reviewer and limit it to main (Settings > Environments): the run then waits
+    # for a person before the OIDC token is issued. Until that is configured the environment adds no gate.
+    environment: mcp-registry
     permissions:
       contents: read
       id-token: write
