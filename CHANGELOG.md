@@ -1,5 +1,37 @@
 # Changelog
 
+## 2.0.2 — a shorter path to a first result, and safer output
+
+### For a new user
+- The README opens with four steps that work once a key exists: create a key, add the server, confirm the
+  connection with a `nuvc_venture_math` call (no credits), then save a mandate and score a pitch. The pipeline tools, which need
+  the investor workspace to be enabled, have their own section. Cursor and Claude Code setup are spelled out.
+- Install commands name this version, and a release check fails if the README pins any other 2.x version.
+- The listing description leads with what every key can do: score against your mandate, screen funds, run the maths.
+
+### Clearer recovery
+- Any `401` now says that a key which used to work may have expired or been revoked, and where to create a new
+  one. The earlier hint waited for the word "expired", which the API does not send.
+- An out-of-credits (`402`) or spent-quota (`429`) message names the billing page, so you can act on it without
+  another tool call. The package still never starts a checkout.
+- "Not enabled for your account" now says which tools still work and how to ask for access.
+
+### Safer output
+- Results that carry deck, investor or mandate text (scoring, analysis, extraction, matching, fund screening, the
+  saved mandate and the workspace tools) have invisible characters removed: the zero-width space, bidirectional
+  marks and overrides, Unicode tag characters, and control characters other than tab and newline. Markdown image
+  syntax in them is escaped. Joiners that emoji and Persian or Indic text need are kept. Headings and line breaks
+  in returned text are not altered, so the data notice at the top of each result remains the guard for those.
+- A decision or verdict that arrives as something other than text is left out; it can no longer raise an error
+  after a credit was spent or print as `[object Object]`.
+
+### Measurement
+- Links to nuvc.ai from the README, the npm homepage field and the registry listing carry a source tag, so a visit
+  can be traced to the listing it came from. No key, prompt or usage data is attached to a link.
+- The request `User-Agent` names the exact package version.
+
+No change to tool names, input schemas or credit costs.
+
 ## 2.0.1 — listed in the official MCP Registry
 
 - Adds `mcpName` (`io.github.repyh-com/nuvc-mcp`) to `package.json`, a matching `mcp-name` line in the README and a

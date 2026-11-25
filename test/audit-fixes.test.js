@@ -60,11 +60,21 @@ test("a 402 points to free billing discovery without promising a pack or repeati
   assert.ok(!/\$\d|AUD/.test(e.message), e.message);
 });
 
-test("an expired-key 401 says keys expire and where to create a new one", async () => {
-  const e = await failsWith(() => h().nuvc_models({}), () => ({ status: 401, body: { detail: "API key has expired" } }));
-  assert.match(e.message, /API key has expired/);
-  assert.match(e.message, /expire \(30 days by default\); create a new key at https:\/\/nuvc\.ai\/api-platform\/keys/);
-  assert.equal(e.status, 401);
+test("any 401 says a key that used to work may have expired and where to create a new one", async () => {
+  // The API answers an unknown, revoked and expired key with the same text, so the hint cannot wait for "expired".
+  for (const detail of ["API key has expired", "Authentication required - use Supabase JWT, magic link token, or API key (nuvc_)"]) {
+    const e = await failsWith(() => h().nuvc_models({}), () => ({ status: 401, body: { detail } }));
+    assert.ok(e.message.includes(detail), e.message);
+    assert.match(e.message, /may have expired or been revoked: create a new one at https:\/\/nuvc\.ai\/api-platform\/keys$/);
+    assert.equal(e.status, 401);
+  }
+});
+
+test("a 402 and a spent quota name the billing page, so paying does not depend on another tool call", async () => {
+  let e = await failsWith(() => h().nuvc_score({ text: "x".repeat(20) }), () => ({ status: 402, body: { detail: { message: "none left" } } }));
+  assert.match(e.message, /https:\/\/nuvc\.ai\/api-platform\/billing/);
+  e = await failsWith(() => h().nuvc_score({ text: "x".repeat(20) }), () => ({ status: 429, body: { detail: { code: "QUOTA_EXCEEDED", message: "used" } } }));
+  assert.match(e.message, /https:\/\/nuvc\.ai\/api-platform\/billing/);
 });
 
 // --- 2. input limits --------------------------------------------------------------------------------

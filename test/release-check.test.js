@@ -123,6 +123,20 @@ test("manifest.json and smithery.yaml carry the package version", () => {
   assert.deepEqual(versions, [pkg.version]);
 });
 
+test("server.json and the README install commands name the package version", () => {
+  // server.json is what the MCP Registry lists; the README is what npm and the registry show a visitor.
+  // A stale pin in either sends a new user to an older release.
+  const server = JSON.parse(readFileSync(join(root, "server.json"), "utf8"));
+  assert.equal(server.name, pkg.mcpName);
+  assert.equal(server.version, pkg.version);
+  assert.deepEqual(server.packages.map((p) => [p.identifier, p.version]), [[pkg.name, pkg.version]]);
+  const readme = readFileSync(join(root, "README.md"), "utf8");
+  const major = pkg.version.split(".")[0];
+  const pins = [...readme.matchAll(/nuvc-mcp[@-](\d+\.\d+\.\d+)/g)].map((m) => m[1]).filter((v) => v.split(".")[0] === major);
+  assert.ok(pins.length > 0, "README pins the package version in its install commands");
+  assert.deepEqual([...new Set(pins)], [pkg.version], "every current-major pin in the README is this version");
+});
+
 test("manifest.json and smithery.yaml list exactly the tools the full toolset advertises", async () => {
   // Neither file ships; their descriptions are the registry work. Their tool NAMES must not drift from the package.
   const { TOOLS } = await import("../lib/tools.js");

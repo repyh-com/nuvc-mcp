@@ -1,8 +1,8 @@
 {
   "name": "nuvc-mcp",
   "mcpName": "io.github.repyh-com/nuvc-mcp",
-  "version": "2.0.1",
-  "description": "MCP server for investors: read your own pipeline and past decisions in Claude or Cursor; score decks, screen funds, find co-investors.",
+  "version": "2.0.2",
+  "description": "MCP server for investors: score a pitch 0-10 against your own mandate, screen VC funds as an LP and run fund maths, in Claude or Cursor.",
   "type": "module",
   "main": "index.js",
   "bin": {
@@ -33,7 +33,7 @@
     "claude",
     "nuvc"
   ],
-  "homepage": "https://nuvc.ai/developers",
+  "homepage": "https://nuvc.ai/developers?utm_source=npm&utm_medium=package&utm_campaign=mcp-listings-2026-11",
   "bugs": {
     "email": "hello@nuvc.ai"
   },
