@@ -2,7 +2,7 @@
   "manifest_version": "0.3",
   "name": "nuvc",
   "display_name": "NUVC — Investor deal & fund intelligence",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Investor MCP: score and screen deals against your firm's saved mandate, screen funds as an LP, and find co-investors. Bound to your firm's NUVC account.",
   "long_description": "NUVC is the conviction layer for capital allocation. nuvc-mcp 2.0 is investor-only: score any startup or fund with an IC-ready verdict, save your firm's mandate once on your NUVC account so every score returns a two-way mandate fit, find co-investors, and run venture math and fund economics — all from Claude. Get an API key at https://nuvc.ai/api-platform/keys.",
   "author": {

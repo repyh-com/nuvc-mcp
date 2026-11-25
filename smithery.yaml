@@ -1,6 +1,6 @@
 name: nuvc
 description: Investor MCP — score and screen deals against your firm's saved mandate, screen funds as an LP, and find co-investors. Bound to your firm's NUVC account (investor-only as of 2.0).
-version: 2.0.0
+version: 2.0.1
 homepage: https://nuvc.ai/api-platform/keys
 license: MIT
 

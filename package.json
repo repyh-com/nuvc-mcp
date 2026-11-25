@@ -1,6 +1,7 @@
 {
   "name": "nuvc-mcp",
-  "version": "2.0.0",
+  "mcpName": "io.github.repyh-com/nuvc-mcp",
+  "version": "2.0.1",
   "description": "MCP server for investors: read your own pipeline and past decisions in Claude or Cursor; score decks, screen funds, find co-investors.",
   "type": "module",
   "main": "index.js",
