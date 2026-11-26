@@ -25,7 +25,7 @@ tools:
   - name: nuvc_extract
     description: Extract structured fields from any pitch or business description
   - name: nuvc_models
-    description: List available AI models and provider health
+    description: Check whether the scoring service is available right now
   - name: nuvc_match_investors
     description: Find co-investors and syndicate partners — a ranked, thesis-fit shortlist (a well-matched few beats a mass blast), each with a reason and brief
   - name: nuvc_screen_fund

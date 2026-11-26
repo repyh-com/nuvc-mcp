@@ -1,4 +1,4 @@
-// Tool annotations (MCP spec field names) and the untrusted-content marker (#6737 F12).
+// Tool annotations (MCP spec field names) and the untrusted-content marker.
 // The annotations are checked against what each handler actually does over HTTP, not against a copy of the table.
 import { test } from "node:test";
 import assert from "node:assert/strict";

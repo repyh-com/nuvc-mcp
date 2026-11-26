@@ -45,9 +45,6 @@ export const MATCH = {
         website: "https://acme.vc",
       },
     ],
-    pool_size: "5800+",
-    matching_method: "semantic_embedding",
-    latency_ms: 120,
   },
 };
 
@@ -70,9 +67,10 @@ export const SCREEN = {
 export const MODELS = {
   success: true,
   data: {
-    providers: [{ name: "openai", available: true, healthy: true }],
-    preference: ["openai"],
-    embedding_models: ["text-embedding-3-small"],
+    providers: [{ name: "provider-a", available: true, healthy: true }, { name: "provider-b", available: true, healthy: true }],
+    preference: ["provider-a", "provider-b"],
+    embedding_models: ["embedding-model-x"],
+    model_equivalence: { "model-1": { "provider-b": "model-2" } },
   },
 };
 

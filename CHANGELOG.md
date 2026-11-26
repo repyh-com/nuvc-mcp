@@ -25,12 +25,22 @@
 - A decision or verdict that arrives as something other than text is left out; it can no longer raise an error
   after a credit was spent or print as `[object Object]`.
 
+### Less detail about the service
+- `nuvc_models` now answers one question: is the scoring service available right now. It no longer lists what sits
+  behind the API.
+- A match result, and the description of the matching tool, no longer say how the shortlist is computed or how
+  long it took.
+- The fund-name example in `nuvc_screen_fund` is a made-up name.
+- If an analysis or extraction comes back in an unexpected shape, the result says so; the raw body is no longer
+  printed.
+
 ### Measurement
 - Links to nuvc.ai from the README, the npm homepage field and the registry listing carry a source tag, so a visit
   can be traced to the listing it came from. No key, prompt or usage data is attached to a link.
 - The request `User-Agent` names the exact package version.
 
-No change to tool names, input schemas or credit costs.
+No change to tool names, input schemas or credit costs. The output of `nuvc_models` and the first line of a match
+result are shorter, as described above.
 
 ## 2.0.1 — listed in the official MCP Registry
 

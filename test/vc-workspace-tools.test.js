@@ -1,4 +1,4 @@
-// Investor-workspace read tools (#5976 phase 3, WP-10): nuvc_my_deals, nuvc_deal_brief, nuvc_precedent.
+// Investor-workspace read tools: nuvc_my_deals, nuvc_deal_brief, nuvc_precedent.
 // /vc/* is NOT camelCase-exempt, so the fake API answers the way prod does: {success, data, message}
 // with camelCased keys.
 import { test } from "node:test";

@@ -1,4 +1,4 @@
-// Release check (#6763): the published tarball is an allowlist, so a new file cannot ship unreviewed.
+// Release check: the published tarball is an allowlist, so a new file cannot ship unreviewed.
 // Fast: one `npm pack --dry-run --json` (no network, no registry write) plus a few file reads.
 import { test } from "node:test";
 import assert from "node:assert/strict";

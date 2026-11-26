@@ -1,7 +1,7 @@
 // Contract: every handler renders the same, non-empty output whether the API answers in
-// snake_case (documented wire format) or camelCase (what ResponseStandardizationMiddleware
+// snake_case (documented wire format) or camelCase (what the platform's response middleware
 // produces on non-exempt routes). Reading only one casing silently renders an empty result
-// for a paid credit (#3420).
+// for a paid credit.
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -24,9 +24,9 @@ const ROUTES = {
 
 const CASES = [
   ["nuvc_score", { text: "A fintech for SMEs" }, ["7.4", "Confidence: High (0.80)", "Problem Market", "Solid team", "ConvictionScore: 6.4 / 10", "Mutual fit: 71%", "Cheque too small", "Stage match"]],
-  ["nuvc_match_investors", { text: "A fintech for SMEs" }, ["Jane Doe", "Acme Ventures", "87% match", "Tier 1", "$500K-$2M", "ANZ", "Backs seed fintech", "AI semantic matching"]],
+  ["nuvc_match_investors", { text: "A fintech for SMEs" }, ["Jane Doe", "Acme Ventures", "87% match", "Tier 1", "$500K-$2M", "ANZ", "Backs seed fintech"]],
   ["nuvc_screen_fund", { fund_name: "Fund IV" }, ["Fund IV", "6.8 / 10", "Thin track record", "Gp Team Quality", "Strong GP", "No realised exits", "limited data"]],
-  ["nuvc_models", {}, ["openai", "text-embedding-3-small"]],
+  ["nuvc_models", {}, ["NUVC service status", "Scoring service: Available."]],
   ["nuvc_venture_math", { arr: 1000000 }, ["Burn Multiple", "LTV/CAC Ratio", "Rule of 40", "Financial Health Score", "Strong", "great 1.5", "No data"]],
   ["nuvc_fund_economics", { fund_size: 100000000 }, ["Fund Health Score", "Fee Drag %", "GP Carry %", "Top Quartile", "Balanced", "Gross Tvpi", "Top quartile: 2.50x", "Investable Capital", "Implied Portfolio Count", "Follow-On Reserve", "Total Deployment Capacity"]],
   ["nuvc_get_mandate", {}, ["FinTech", "$500,000"]],
@@ -94,7 +94,7 @@ test("legacy nested scores alias and flat contract both resolve overall_score", 
   }
 });
 
-test("a double-wrapped {success, data: {data}} venture-math body is unwrapped (#2506)", async () => {
+test("a double-wrapped {success, data: {data}} venture-math body is unwrapped", async () => {
   const api = stubApi((c) =>
     c.path.endsWith("/compute") ? { success: true, data: F.VENTURE } : { success: true, data: F.BENCH }
   );
@@ -124,7 +124,7 @@ test("package.json version matches the manifests that carry it", () => {
   assert.deepEqual(versions, [v]);
 });
 
-test("nuvc_match_investors makes no pool-size claim when the API omits pool_size (#5506 A19)", async () => {
+test("nuvc_match_investors makes no pool-size claim when the API omits pool_size", async () => {
   const { pool_size, ...data } = F.MATCH.data;
   const api = stubApi(() => ({ ...F.MATCH, data }));
   try {

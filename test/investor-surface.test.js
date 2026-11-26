@@ -1,5 +1,5 @@
-// nuvc-mcp 2.0 contract (#5592 / #5710 R15): investor-only tool surface, mandate bound to the
-// firm ACCOUNT (not a session), no founder tool under any env, a REPYH founder key refused (#6736).
+// nuvc-mcp 2.0 contract: investor-only tool surface, mandate bound to the
+// firm ACCOUNT (not a session), no founder tool under any env, a REPYH founder key refused.
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { TOOLS, getTools, createHandlers, isFounderKey, isValidApiKey } from "../lib/tools.js";

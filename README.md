@@ -97,7 +97,7 @@ Family office accounts do not get the pipeline tools (`nuvc_my_deals`, `nuvc_dea
 
 | Tool | What you would ask |
 |---|---|
-| `nuvc_models` | "Which models are available right now?" |
+| `nuvc_models` | "Is NUVC scoring available right now?" |
 | `nuvc_score` | "Score this pitch text and return the result as JSON I can show in my platform." |
 | `nuvc_extract`, `nuvc_analyze` | "Extract the company fields from this pitch text: [paste]" |
 | `nuvc_match_investors`, `nuvc_screen_fund` | "Find five seed-stage investors for this startup description: [paste]" |
@@ -142,7 +142,7 @@ What `NUVC_TOOLSET=all` lists.
 | Tool | What it does |
 |------|-------------|
 | `nuvc_extract` | Extract structured data from any pitch, CIM, or deal memo |
-| `nuvc_models` | List available AI models and provider health |
+| `nuvc_models` | Whether the scoring service is available right now |
 
 ### Your workspace (read-only)
 

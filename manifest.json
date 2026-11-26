@@ -43,7 +43,7 @@
     { "name": "nuvc_get_mandate", "description": "Retrieve your firm's saved mandate" },
     { "name": "nuvc_venture_math", "description": "Compute dilution, ownership, burn multiple, LTV/CAC, Rule of 40, IRR/MOIC vs VC thresholds" },
     { "name": "nuvc_fund_economics", "description": "Fund economics for LPs — fee drag, GP alignment, J-curve, portfolio construction" },
-    { "name": "nuvc_models", "description": "List available scoring models and provider health" },
+    { "name": "nuvc_models", "description": "Check whether the scoring service is available right now" },
     { "name": "nuvc_my_deals", "description": "Your own deal pipeline, read-only" },
     { "name": "nuvc_deal_brief", "description": "The decision brief for a deal in your pipeline, read-only" },
     { "name": "nuvc_precedent", "description": "Your own decision history on similar deals, read-only" }
