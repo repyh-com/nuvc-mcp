@@ -1,4 +1,4 @@
-// HTTP transport hardening (#6737): key in headers only, Origin allow-list, per-client rate limit,
+// HTTP transport hardening: key in headers only, Origin allow-list, per-client rate limit,
 // access log without secrets, bounded limiter.
 import { test } from "node:test";
 import assert from "node:assert/strict";

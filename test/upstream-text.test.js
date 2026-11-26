@@ -6,6 +6,7 @@ import { createRequire } from "node:module";
 import { createHandlers } from "../lib/tools.js";
 import { scrubUpstream, UNTRUSTED_NOTICE } from "../lib/own-data.js";
 import { stubApi, KEY_A } from "./helpers.js";
+import * as F from "./fixtures.js";
 
 const h = () => createHandlers(KEY_A);
 const TAGS = String.fromCodePoint(0xe0049, 0xe0067, 0xe006e); // Unicode tag characters: invisible to a reader
@@ -72,4 +73,68 @@ test("the User-Agent names the exact package version", async () => {
     globalThis.fetch = realFetch;
   }
   assert.equal(seen, `nuvc-mcp/${version}`);
+});
+
+test("the status tool reports availability and nothing about what sits behind the API", async () => {
+  // The stub carries provider names, a fallback order, model identifiers and an equivalence map; none may be shown.
+  let api = stubApi(() => F.MODELS);
+  try {
+    const out = await h().nuvc_models({});
+    assert.equal(out, "## NUVC service status\n\nScoring service: Available.");
+    assert.doesNotMatch(out, /provider-|embedding|model-|\u2192|Preference/i);
+  } finally {
+    api.restore();
+  }
+  api = stubApi(() => ({ success: true, data: { providers: [{ name: "provider-a", available: true, healthy: false }], preference: ["provider-a"] } }));
+  try {
+    const out = await h().nuvc_models({});
+    assert.match(out, /Scoring service: Unavailable right now/);
+    assert.ok(!out.includes("provider-a"), out);
+  } finally {
+    api.restore();
+  }
+  api = stubApi(() => ({ success: true, data: {} }));
+  try {
+    assert.match(await h().nuvc_models({}), /Status was not reported/);
+  } finally {
+    api.restore();
+  }
+});
+
+test("a match result shows the shortlist, not how it was computed or how long it took", async () => {
+  const api = stubApi(() => F.MATCH);
+  try {
+    const out = await h().nuvc_match_investors({ text: "A fintech for SMEs with traction" });
+    assert.match(out, /matched from the NUVC investor database\n/);
+    assert.doesNotMatch(out, /semantic|keyword matching|\d+ ?ms\b|latency/i);
+  } finally {
+    api.restore();
+  }
+});
+
+test("no tool description names a provider, a model or how matching is computed, and examples use made-up names", async () => {
+  const { getTools } = await import("../lib/tools.js");
+  const text = JSON.stringify(getTools());
+  assert.doesNotMatch(text, /openai|anthropic|gemini|gpt-|embedding|semantic matching|provider health/i);
+  assert.match(text, /Example Capital Fund IV/);
+});
+
+test("an analysis or extraction body in an unexpected shape is never printed as-is", async () => {
+  const odd = { success: true, data: { usage: { model: "model-1", latency_ms: 900 }, note: "internal" } };
+  let api = stubApi(() => odd);
+  try {
+    const out = await h().nuvc_analyze({ text: "A pitch with enough detail for feedback" });
+    assert.match(out, /No analysis was returned; try again\./);
+    assert.doesNotMatch(out, /model-1|latency|internal|usage/);
+  } finally {
+    api.restore();
+  }
+  api = stubApi(() => odd);
+  try {
+    const out = await h().nuvc_extract({ text: "A pitch with enough detail for feedback" });
+    assert.match(out, /No fields were returned; try again\./);
+    assert.doesNotMatch(out, /model-1|latency|internal|usage/i);
+  } finally {
+    api.restore();
+  }
 });

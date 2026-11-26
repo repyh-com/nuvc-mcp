@@ -4,7 +4,7 @@ import { camel } from "../lib/tools.js";
 export const KEY_A = "nuvc_test_key_alice";
 export const KEY_B = "nuvc_test_key_bob";
 
-/** Deep-camelCase object keys the way ResponseStandardizationMiddleware does. */
+/** Deep-camelCase object keys the way some API routes do. */
 export function camelKeys(v) {
   if (Array.isArray(v)) return v.map(camelKeys);
   if (v && typeof v === "object") {

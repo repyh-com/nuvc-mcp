@@ -1,4 +1,4 @@
-// Tool audit fixes (#6763): readable validation and quota errors, stated input limits, confidence on scores,
+// Tool audit fixes: readable validation and quota errors, stated input limits, confidence on scores,
 // and no blank or null output. Response bodies are shaped like the real routes' bodies.
 import { test } from "node:test";
 import assert from "node:assert/strict";
@@ -62,7 +62,7 @@ test("a 402 points to free billing discovery without promising a pack or repeati
 
 test("any 401 says a key that used to work may have expired and where to create a new one", async () => {
   // The API answers an unknown, revoked and expired key with the same text, so the hint cannot wait for "expired".
-  for (const detail of ["API key has expired", "Authentication required - use Supabase JWT, magic link token, or API key (nuvc_)"]) {
+  for (const detail of ["API key has expired", "Authentication required"]) {
     const e = await failsWith(() => h().nuvc_models({}), () => ({ status: 401, body: { detail } }));
     assert.ok(e.message.includes(detail), e.message);
     assert.match(e.message, /may have expired or been revoked: create a new one at https:\/\/nuvc\.ai\/api-platform\/keys$/);
@@ -286,12 +286,12 @@ test("nuvc_set_mandate says it replaces the saved mandate", () => {
 // --- 9. match grammar and pool size -----------------------------------------------------------------
 
 test("nuvc_match_investors prints no pool size and gets the count grammar right", async () => {
-  const one = { ...F.MATCH.data, matches: F.MATCH.data.matches.slice(0, 1), pool_size: "5800+" };
+  const one = { ...F.MATCH.data, matches: F.MATCH.data.matches.slice(0, 1), pool_size: "12345+" };
   const api = stubApi(() => ({ success: true, data: one }));
   try {
     const out = await h().nuvc_match_investors({ text: "A fintech for SMEs and their lenders" });
     assert.ok(out.includes("**1 investor** matched from the NUVC investor database"), out);
-    assert.ok(!out.includes("5800"), out);
+    assert.ok(!out.includes("12345"), out);
   } finally {
     api.restore();
   }
