@@ -1,19 +1,19 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.repyh-com/nuvc-mcp",
-  "title": "NUVC",
-  "description": "Investor MCP: score deals against your saved mandate, screen funds as an LP, read your pipeline.",
-  "websiteUrl": "https://nuvc.ai/developers",
+  "title": "NUVC: investor deal and fund screening",
+  "description": "Score a pitch 0-10 against your own mandate, screen VC funds as an LP, run fund maths. You decide.",
+  "websiteUrl": "https://nuvc.ai/developers?utm_source=mcp-registry&utm_medium=listing&utm_campaign=mcp-listings-2026-11",
   "repository": {
     "url": "https://github.com/repyh-com/nuvc-mcp",
     "source": "github"
   },
-  "version": "2.0.1",
+  "version": "2.0.2",
   "packages": [
     {
       "registryType": "npm",
       "identifier": "nuvc-mcp",
-      "version": "2.0.1",
+      "version": "2.0.2",
       "transport": {
         "type": "stdio"
       },

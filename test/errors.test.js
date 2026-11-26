@@ -52,11 +52,11 @@ test("a pipeline tool reads every status in both shapes", async () => {
     const run = (status, original) => failsWith((h) => h.nuvc_my_deals({}), { status, body: wrap(original) });
     let e = await run(401, { detail: "API key has expired" });
     assert.match(e.message, /API key has expired/, shape);
-    assert.match(e.message, /Keys expire \(30 days by default\); create a new key at https:\/\/nuvc\.ai\/api-platform\/keys/, shape);
+    assert.match(e.message, /may have expired or been revoked: create a new one at https:\/\/nuvc\.ai\/api-platform\/keys/, shape);
     assert.equal(e.status, 401);
     e = await run(401, { detail: "Invalid API key" });
     assert.match(e.message, /Auth error: Invalid API key/, shape);
-    assert.ok(!/expire/.test(e.message), shape);
+    assert.match(e.message, /may have expired or been revoked/, shape);
     e = await run(403, { detail: { code: "FORBIDDEN", message: "API key lacks required scope" } });
     assert.equal(e.message, NO_ACCESS, shape);
     e = await run(404, { detail: "Not found" });

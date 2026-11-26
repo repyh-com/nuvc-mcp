@@ -1,77 +1,51 @@
-# nuvc-mcp: your pipeline and decision history, inside Claude and Cursor
+# nuvc-mcp: screen pitches and funds against your own mandate, inside Claude and Cursor
 
 <!-- mcp-name: io.github.repyh-com/nuvc-mcp -->
 
-Examine the evidence behind a deal or fund, identify the open questions, and decide what deserves diligence. You retain every investment decision. Scoring, screening and matching spend credits; analysis and extraction use your monthly quota. Stored workspace reads do not rerun scoring.
-
-**Version 2.0.0:** this release is investor-only and changes the 1.x founder workflow. Use the version-pinned setup below for this toolset, or run a local source copy. Account permissions and backend availability still apply; installing the package does not enable workspace access or purchase credits.
-
-- Read your own pipeline, a deal's decision brief, and how you decided on similar deals. Read-only, and only the account that owns your key. These three tools need the investor workspace to be on for your account.
-- Score a pitch 0 to 10 with a confidence level against the mandate saved on your firm account, screen a fund as an LP, or find co-investors. One credit each.
-- Your key travels in a header, not in a URL, by default. Tools that spend credits are labelled, so a client can ask first.
-
-## GitHub release installation
-
-Release artifacts require Node.js 20 or newer (Node.js 24 LTS recommended). After the versioned GitHub release asset is available, configure your existing compatible key locally and run:
-
-```bash
-NUVC_API_KEY='replace_with_your_existing_key' npx --yes https://github.com/repyh-com/nuvc-mcp/releases/download/v2.0.0/nuvc-mcp-2.0.0.tgz
-```
-
-The npm commands and client configuration below require `nuvc-mcp@2.0.0` to have been published to the npm registry. If that version is not available there, replace the `nuvc-mcp@2.0.0` argument in your client configuration with the GitHub asset URL above. A GitHub release asset and an npm registry package are separate distribution channels; each installation path becomes usable when its corresponding artifact is published.
-
-Before running a local source copy, use Node.js 20 or newer (Node.js 24 LTS recommended) and install its dependencies from the directory containing this package's `package.json`:
-
-```bash
-npm install --ignore-scripts
-```
-
-Then configure your key in your MCP client's environment and restart the client. Never paste a real key into a conversation.
-
-```bash
-NUVC_TOOLSET=vc node index.js  # from the local package directory; configure NUVC_API_KEY first
-```
-
-To connect a desktop MCP client to this local package, add a local server entry (replace the absolute path and placeholder locally):
-
-```json
-{
-  "mcpServers": {
-    "nuvc": {
-      "command": "node",
-      "args": ["/absolute/path/to/local-mcp/index.js"],
-      "env": { "NUVC_API_KEY": "replace_with_your_key", "NUVC_TOOLSET": "vc" }
-    }
-  }
-}
-```
-
-Keep real keys in your client configuration, never in chat or source control. Allocators should choose `allocator` instead of `vc`.
-
-Try:
-
-- *"List my pipeline by stage, with the screening signal on each deal."*
-- *"Open the decision brief for [company], list its open questions, then show how I decided on similar deals."*
-- *"Score this pitch against my saved mandate: [paste text]"* (uses 1 credit)
-
-[![Smithery](https://smithery.ai/badge/nuvc)](https://smithery.ai/server/nuvc)
 [![npm](https://img.shields.io/npm/v/nuvc-mcp)](https://npmjs.com/package/nuvc-mcp)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
+Save your mandate once. Paste a pitch and get a 0 to 10 score with a confidence level and a proceed / watch / pass read against that mandate. Screen a VC fund as an LP. Run fund and venture maths. You make every investment decision.
+
+- Scoring, fund screening and co-investor matching use credits. Fund and venture maths do not spend score credits.
+- Your key travels in a header, not in a URL, by default. Tools that spend credits are labelled, so a client can ask first.
+- For investors. Version 2 removed the 1.x founder tools; founders use `repyh-mcp` (see [Migrating from 1.x](#migrating-from-1x)).
+
+## Start in four steps
+
+1. **Create a free API key.** Start at [nuvc.ai/developers](https://nuvc.ai/developers?utm_source=nuvc-mcp&utm_medium=readme&utm_campaign=mcp-listings-2026-11&utm_content=quickstart), which shows what a new key includes and the current credit price. Give the key the scopes for the tools you want; scoring needs `ai:score` (see [Which scopes your key needs](#which-scopes-your-key-needs)).
+2. **Add the server to your assistant.** In Claude Code:
+
+   ```bash
+   claude mcp add nuvc --scope user -e NUVC_API_KEY=nuvc_your_key -- npx --yes nuvc-mcp@2.0.2
+   ```
+
+   The Claude Desktop and Cursor configuration is under [Setup](#setup).
+3. **Confirm it works without spending a credit.** Ask: “Use the `nuvc_venture_math` tool: $40K MRR, $90K monthly burn, raising $1.5M seed at $8M pre. Do the numbers hold?” Your client should show a `nuvc_venture_math` call, which does not spend score credits. If it answers without one, the server is not connected.
+4. **Save your mandate, then score a pitch.** Ask: “Save my mandate: seed, B2B software, ANZ, $25K to $100K cheques.” Then: “Score this pitch against my mandate: [paste text]”. Scoring uses credits.
+
+To see your balance and what each tool costs, open [API billing](https://nuvc.ai/api-platform/billing) or ask for `nuvc_billing`.
+
 ## Confirm your connection without spending credits
 
-After adding the server, restart your MCP client and ask: “Use `nuvc_billing` to check my allowance and tool costs.” A successful response confirms that the client, key and account can read billing; it does not run analysis or start a purchase. If the server says billing discovery is unavailable, the deployed server may be an earlier release. Do not infer a zero balance or buy access to fix a connection problem.
+After adding the server, restart your MCP client and ask the venture-maths question in step 3 above. Your client should show a `nuvc_venture_math` call; it does not spend score credits, and a result confirms that the client and key work. To see your allowance and tool costs, open [API billing](https://nuvc.ai/api-platform/billing), or ask: “Use `nuvc_billing` to check my allowance and tool costs.” That read does not run analysis or start a purchase, and it needs a server release that includes billing discovery. If the server says billing discovery is unavailable, the deployed server may be an earlier release. Do not infer a zero balance or buy access to fix a connection problem.
 
 ## Your first useful result
 
 Choose your workflow before spending a credit:
 
-- **Angel or VC, existing pipeline:** “List my deals, then open the brief for the one I choose and explain the open questions.” Workspace access must be enabled for your account.
 - **New pitch:** “Show my saved mandate before screening this pitch: [paste].” Review the mandate first; saving one replaces the firm account's mandate and needs your request.
 - **Allocator:** “Screen this fund using these terms, track record and LP mandate: [paste].” Use `NUVC_TOOLSET=allocator`; venture pipeline tools are for angel and VC accounts. Pass mandates inline for fund and direct-deal reviews.
 - **Integrator:** use `NUVC_TOOLSET=integrator` and pass any mandate inline. Do not depend on venture workspace access.
 
 Both transports supply the same guidance to your assistant at initialization. Following a result is your choice: no automatic scoring, matching, paid retries or account changes.
+
+## If the investor workspace is on for your account
+
+Three read-only tools read your own pipeline, a deal's decision brief, and how you decided on similar deals. They return only the account that owns your key, and they need the investor workspace to be enabled for it. Without it they answer that the feature is not enabled; every other tool still works.
+
+- *"List my pipeline by stage, with the screening signal on each deal."*
+- *"Open the decision brief for [company], list its open questions, then show how I decided on similar deals."*
 
 ## Check costs before acting
 
@@ -189,17 +163,17 @@ your account.
 This package takes an **investor** key (starts with `nuvc_`). A founder key (`repyh_...`) is refused
 before any request. Use `repyh-mcp` for founder workflows; `nuvc-mcp@1.4.1` retains legacy behavior.
 
-Create or review an investor key at **[nuvc.ai/api-platform/keys](https://nuvc.ai/api-platform/keys)**. Check the current allowance in your account.
+New to NUVC? Start at **[nuvc.ai/developers](https://nuvc.ai/developers?utm_source=nuvc-mcp&utm_medium=readme&utm_campaign=mcp-listings-2026-11&utm_content=setup)**, which shows what a new key includes. Already have an account? Create or review a key at [nuvc.ai/api-platform/keys](https://nuvc.ai/api-platform/keys) and check the current allowance there.
 
 ### 2. Choose the investor release
 
-Use `nuvc-mcp@2.0.0` in the commands below. This is a breaking change from 1.x: it accepts investor keys and removes founder tools. Registry listings and third-party installers may select a different version; check the selected version before migrating a client.
+Use `nuvc-mcp@2.0.2` in the commands below. This is a breaking change from 1.x: it accepts investor keys and removes founder tools. Registry listings and third-party installers may select a different version; check the selected version before migrating a client.
 
 ### 3. Or run directly
 
 ```bash
 export NUVC_API_KEY=nuvc_your_key_here
-npx --yes nuvc-mcp@2.0.0
+npx --yes nuvc-mcp@2.0.2
 ```
 
 ### 4. Claude Desktop config
@@ -211,7 +185,7 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
   "mcpServers": {
     "nuvc": {
       "command": "npx",
-      "args": ["--yes", "nuvc-mcp@2.0.0"],
+      "args": ["--yes", "nuvc-mcp@2.0.2"],
       "env": {
         "NUVC_API_KEY": "nuvc_your_key_here"
       }
@@ -220,12 +194,51 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
 }
 ```
 
+Cursor reads the same block from `~/.cursor/mcp.json`. If a desktop client cannot find `npx` (common when Node.js is installed with a version manager), put the full path to `npx` in `command`.
+
 ### 5. Claude Code
 
 ```bash
-claude mcp add nuvc -- npx --yes nuvc-mcp@2.0.0
-# Then set NUVC_API_KEY in your environment
+claude mcp add nuvc --scope user -e NUVC_API_KEY=nuvc_your_key_here -- npx --yes nuvc-mcp@2.0.2
 ```
+
+## Install from a GitHub release or a local copy
+
+npm is the usual route. Each release also attaches the same tarball on GitHub, for anyone who would rather not install from the npm registry. Both need Node.js 20 or newer (Node.js 24 LTS recommended). Configure your key locally and run:
+
+```bash
+NUVC_API_KEY='replace_with_your_existing_key' npx --yes https://github.com/repyh-com/nuvc-mcp/releases/download/v2.0.2/nuvc-mcp-2.0.2.tgz
+```
+
+To use the GitHub tarball in a client configuration, replace the `nuvc-mcp@2.0.2` argument with the asset URL above.
+
+Before running a local source copy, use Node.js 20 or newer (Node.js 24 LTS recommended) and install its dependencies from the directory containing this package's `package.json`:
+
+```bash
+npm install --ignore-scripts
+```
+
+Then configure your key in your MCP client's environment and restart the client. Never paste a real key into a conversation.
+
+```bash
+NUVC_TOOLSET=vc node index.js  # from the local package directory; configure NUVC_API_KEY first
+```
+
+To connect a desktop MCP client to this local package, add a local server entry (replace the absolute path and placeholder locally):
+
+```json
+{
+  "mcpServers": {
+    "nuvc": {
+      "command": "node",
+      "args": ["/absolute/path/to/local-mcp/index.js"],
+      "env": { "NUVC_API_KEY": "replace_with_your_key", "NUVC_TOOLSET": "vc" }
+    }
+  }
+}
+```
+
+Keep real keys in your client configuration, never in chat or source control. Allocators should choose `allocator` instead of `vc`.
 
 ## Which scopes your key needs
 
@@ -269,7 +282,7 @@ if you need the old behaviour unchanged.
 `node server.js` serves `POST /mcp`. Every request must carry the **caller's own** NUVC key
 (`Authorization: Bearer nuvc_...` or `X-API-Key`); a request without one gets `401`. The server never reads a shared key from its environment. Bodies are capped at 1 MB (`413`),
 malformed JSON gets a `400` JSON-RPC parse error, and each request is bound to the calling key's firm account (no state is shared between callers).
-stdio mode (`npx --yes nuvc-mcp@2.0.0`) reads `NUVC_API_KEY` from your local environment.
+stdio mode (`npx --yes nuvc-mcp@2.0.2`) reads `NUVC_API_KEY` from your local environment.
 
 HTTP settings (all optional):
 
@@ -305,6 +318,6 @@ Check your current credit balance and available packs in [API billing](https://n
 
 NUVC is screening and decision-support software for investors; it is not investment advice.
 
-- **Website:** [nuvc.ai](https://nuvc.ai)
+- **Website:** [nuvc.ai](https://nuvc.ai/?utm_source=nuvc-mcp&utm_medium=readme&utm_campaign=mcp-listings-2026-11&utm_content=about)
 - **API Docs:** [nuvc.ai/api-platform/docs](https://nuvc.ai/api-platform/docs)
 - **Support:** hello@nuvc.ai
